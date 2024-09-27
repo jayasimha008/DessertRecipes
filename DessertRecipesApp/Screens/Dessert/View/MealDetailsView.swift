@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+// MealDetailsView struct displays detailed information about a specific meal
 struct MealDetailsView: View {
     
+    // Environment object that provides the DessertViewModel instance
     @EnvironmentObject private var viewModel: DessertViewModel
+    
+    // State variable to control the visibility of the ingredients section
     @State private var isShowIngredients: Bool = true
     
+    // Unique identifier for the meal to fetch details
     var id: String = ""
     
     var body: some View {
@@ -22,13 +27,17 @@ struct MealDetailsView: View {
                 } else {
                     if viewModel.meals.count > 0, let meal = viewModel.meals.first {
                         VStack {
+                            // Display the meal's image
                             mealImage(meal)
                             
+                            // Vertical stack for title and ingredients
                             VStack(alignment: .leading, spacing: 8) {
+                                // Display title and instructions for the meal
                                 titleAndInstructionView(meal)
                                 
-                                Divider()
+                                Divider() //Separator between sections
                                 
+                                // Display ingredients section
                                 ingredientsSection(meal)
                                 
                             }
@@ -38,13 +47,14 @@ struct MealDetailsView: View {
                 }
             }            
         }
+        // Fetch meal details asynchronously when the view appears
         .task {
             await viewModel.fetchMealDetail(by: id)
         }
         .ignoresSafeArea(.all, edges: .top)
         .navigationBarTitleDisplayMode(.inline)
     }
-    
+    // Function to display the meal's image
     func mealImage(_ meal: MealModel) -> some View {
         AsyncImage(url: meal.mealThumbURL) { image in
             image
@@ -54,7 +64,7 @@ struct MealDetailsView: View {
             ProgressView()
         }
     }
-    
+    // Function to display the meal's title and instructions
     func titleAndInstructionView(_ meal: MealModel) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(meal.strMeal)
@@ -70,7 +80,7 @@ struct MealDetailsView: View {
             .frame(height: 100)
         }
     }
-    
+    // Function to display the ingredients section
     func ingredientsSection(_ meal: MealModel) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -90,6 +100,7 @@ struct MealDetailsView: View {
                 })
                 
             }
+            // Show ingredients list if isShowIngredients is true
             if isShowIngredients {
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(0..<meal.ingredients.count, id: \.self) { index in
@@ -110,7 +121,7 @@ struct MealDetailsView: View {
     }
         
 }
-
+// Preview provider for MealDetailsView
 #Preview {
     MealDetailsView(id: "53049")
         .environmentObject(DessertViewModel())

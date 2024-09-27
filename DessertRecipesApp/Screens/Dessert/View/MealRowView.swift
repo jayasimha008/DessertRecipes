@@ -7,10 +7,12 @@
 
 import SwiftUI
 
+// MealRowView struct represents a single row in the meal list displaying a meal's image and name
 struct MealRowView: View {
     let meal: MealModel
     var body: some View {
         VStack {
+            // Asynchronously load the meal's thumbnail image
             AsyncCachedImage(url: meal.mealThumbURL) { image in
                 image
                     .resizable()

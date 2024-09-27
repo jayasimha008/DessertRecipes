@@ -7,11 +7,13 @@
 
 import Foundation
 
+// Struct representing meals data, conforms to Decodable
 struct DessertResponse: Decodable {
     let meals: [MealModel]
 }
 
-struct MealModel: Decodable {    
+// Struct representing a single meal, conforms to Decodable for JSON decoding
+struct MealModel: Decodable {
     let idMeal: String
     let strMeal: String
     let strDrinkAlternate: String?
@@ -22,7 +24,7 @@ struct MealModel: Decodable {
     let strTags: String?
     let strYoutube: String?
     
-    // Optional ingredients and measurements
+    // Optional ingredients
     let strIngredient1: String?
     let strIngredient2: String?
     let strIngredient3: String?
@@ -44,6 +46,7 @@ struct MealModel: Decodable {
     let strIngredient19: String?
     let strIngredient20: String?
     
+    // Optional measurements
     let strMeasure1: String?
     let strMeasure2: String?
     let strMeasure3: String?
@@ -70,6 +73,7 @@ struct MealModel: Decodable {
     let strCreativeCommonsConfirmed: String?
     let dateModified: String?
     
+    // Computed property that aggregates non-empty ingredient strings into an array
     var ingredients: [String] {
         let ingredientsArray = [strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5, strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10, strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15, strIngredient16, strIngredient17, strIngredient18, strIngredient19, strIngredient20].compactMap { ingredient in
             if let ingredient = ingredient, !ingredient.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -83,6 +87,8 @@ struct MealModel: Decodable {
     // Computed property for a comma-separated measurements string
     var measurements: [String] {
         let measurementsArray = [strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5, strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10, strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15, strMeasure16, strMeasure17, strMeasure18, strMeasure19, strMeasure20].compactMap { measurement in
+            
+            // Filter out nil or empty ingredients
             if let measurement = measurement, !measurement.trimmingCharacters(in: .whitespaces).isEmpty {
                 return measurement
             }
@@ -90,7 +96,7 @@ struct MealModel: Decodable {
         }
         return measurementsArray
     }
-    
+    // Generate a URL from the meal thumbnail string
     var mealThumbURL: URL? {
         return URL(string: strMealThumb)
     }
